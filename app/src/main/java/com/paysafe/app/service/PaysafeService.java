@@ -1,7 +1,5 @@
 package com.paysafe.app.service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 
@@ -12,10 +10,10 @@ import org.springframework.web.context.annotation.RequestScope;
 
 import com.paysafe.app.dto.ServerAttributes;
 import com.paysafe.app.dto.ServiceResponse;
-import com.paysafe.app.entity.ConsolidatedMonitoringData;
 import com.paysafe.app.entity.MonitoringData;
 import com.paysafe.app.entity.Status;
 import com.paysafe.app.feignclient.ServiceProxy;
+import com.paysafe.app.repository.PaysafeMonitoringRepository;
 
 import feign.Feign;
 import feign.httpclient.ApacheHttpClient;
@@ -41,6 +39,9 @@ public class PaysafeService {
 
 	private String serverUrl;
 
+	@Autowired
+	private PaysafeMonitoringRepository repository;
+
 	/**
 	 * This service will start the monitoring of the service at the specified
 	 * interval
@@ -59,20 +60,17 @@ public class PaysafeService {
 		 * checks whether the service already has some monitoring data or not
 		 * and updates the monitoring flag for the service
 		 */
-		if (ConsolidatedMonitoringData.monitoringData.containsKey(serverUrl)) {
+		if (repository.findIfMonitoringDataExistsForServer(serverUrl)) {
 			/*
-			 * update the flag if the service has been monitored in the past or
-			 * being currently monitored
+			 * enables the service for monitoring
 			 */
-			ConsolidatedMonitoringData.monitoringData.get(serverUrl).setMonitoring(true);
+			repository.setMonitoringForServer(serverUrl, true);
 
 		} else {
 			/*
-			 * update the flag if the service has never been monitored in the
-			 * past
+			 * add the new service for monitoring with monitoring flag true
 			 */
-			ConsolidatedMonitoringData.monitoringData.put(serverUrl,
-					MonitoringData.builder().statusData(new ArrayList<Status>()).monitoring(true).build());
+			repository.addNewServiceForMonitoring(serverUrl, true);
 		}
 
 		/*
@@ -91,8 +89,8 @@ public class PaysafeService {
 	 */
 	public void stopServerMonitoring(String serverUrl) {
 		System.out.println("\nRequest to stop service monitoring from user");
-		if (ConsolidatedMonitoringData.monitoringData.containsKey(serverUrl)) {
-			ConsolidatedMonitoringData.monitoringData.get(serverUrl).setMonitoring(false);
+		if (repository.findIfMonitoringDataExistsForServer(serverUrl)) {
+			repository.setMonitoringForServer(serverUrl, false);
 
 			System.out.println("Service not to be monitored now. Stop monitoring service");
 
@@ -113,9 +111,14 @@ public class PaysafeService {
 		System.out.println("\nCheck if the service " + serverUrl + " is being monitored or not");
 		Status newStatus;
 		/*
+		 * Check there is any monitoring data for the server
+		 */
+		boolean serviceBeingMonitored = repository.findIfServerIsBeingMonitored(serverUrl);
+
+		/*
 		 * check if the service has to be monitored
 		 */
-		if (ConsolidatedMonitoringData.monitoringData.get(serverUrl).isMonitoring()) {
+		if (serviceBeingMonitored) {
 			System.out.println("Service being monitored. Keep monitoring service");
 			/*
 			 * build a feign client and call the remote service
@@ -134,16 +137,10 @@ public class PaysafeService {
 			}
 
 			/*
-			 * add a status data for the service
+			 * add new status data for the service being monitored
 			 */
-			if (ConsolidatedMonitoringData.monitoringData.containsKey(serverUrl)) {
-				MonitoringData prevServiceData = ConsolidatedMonitoringData.monitoringData.get(serverUrl);
-				List<Status> prevServiceStatus = prevServiceData.getStatusData();
-				/*
-				 * add new status data for the service being monitored
-				 */
-				prevServiceStatus.add(newStatus);
-			}
+			repository.addNewStatusDataForaServer(serverUrl, newStatus);
+
 		} else {
 			/*
 			 * stop monitoring of the service
@@ -161,7 +158,7 @@ public class PaysafeService {
 	 * @return
 	 */
 	public Map<String, MonitoringData> fetchServerStatistics() {
-		return ConsolidatedMonitoringData.monitoringData;
+		return repository.getAllServersData();
 	}
 
 }
