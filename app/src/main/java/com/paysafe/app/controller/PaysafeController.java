@@ -11,8 +11,6 @@ import java.util.Set;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.openfeign.FeignClientsConfiguration;
-import org.springframework.context.annotation.Import;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +28,7 @@ import com.paysafe.app.dto.ServerAttributes;
 import com.paysafe.app.entity.MonitoringData;
 import com.paysafe.app.service.PaysafeService;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 /**
  * 
@@ -40,11 +37,9 @@ import lombok.Data;
  *         Description- This is a controller to handle all the client requests
  *
  */
-@Data
 @RestController
 @RequestMapping("/paysafe-api/monitor")
-@AllArgsConstructor
-@Import(FeignClientsConfiguration.class)
+@RequiredArgsConstructor
 public class PaysafeController {
 
 	@Autowired
