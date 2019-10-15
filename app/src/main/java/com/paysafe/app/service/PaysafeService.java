@@ -18,7 +18,9 @@ import com.paysafe.app.repository.PaysafeMonitoringRepository;
 import feign.Feign;
 import feign.httpclient.ApacheHttpClient;
 import feign.jackson.JacksonDecoder;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 /**
  * 
@@ -27,6 +29,8 @@ import lombok.RequiredArgsConstructor;
  *         Description- This is a service class to handle all the business logic
  *
  */
+@Setter
+@Getter
 @Service
 @RequiredArgsConstructor
 @RequestScope

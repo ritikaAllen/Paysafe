@@ -37,7 +37,10 @@ public class PaysafeMonitoringRepository {
 	 * @return monitoring data
 	 */
 	public MonitoringData getMonitoringDataForServer(String serverUrl) {
-		return ConsolidatedMonitoringData.monitoringData.get(serverUrl);
+		if (findIfMonitoringDataExistsForServer(serverUrl)) {
+			return ConsolidatedMonitoringData.monitoringData.get(serverUrl);
+		}		
+		return null;
 	}
 
 	/**
