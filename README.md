@@ -9,8 +9,9 @@ For building and running the application you need:
 * Postman (optional)
 
 # Running the application locally
-There are several ways to run a Spring Boot application on your local machine. 
-	1) One way is to execute the main method in the com.paysafe.app.PaysafeApplication class from your IDE. Follow the steps below-
+There are several ways to run a Spring Boot application on your local machine.
+
+	1. One way is to execute the main method in the com.paysafe.app.PaysafeApplication class from your IDE. Follow the steps below-
 	
 		# Download the zip or clone the Git repository.
 		# Unzip the zip file (if you downloaded one)
@@ -21,7 +22,7 @@ There are several ways to run a Spring Boot application on your local machine.
 		# Choose the Spring Boot Application file (search for @SpringBootApplication)
 		# Right Click on the file and Run as Java Application
 
-	2) Alternatively you can use the Spring Boot Maven plugin like so:
+	2. Alternatively you can use the Spring Boot Maven plugin like so:
 		mvn spring-boot:run
 		
 Refer pom.xml for all project dependencies
@@ -30,11 +31,11 @@ Refer resources/application.properties for application-wide properties
 #### Use "http://localhost:8080/swagger-ui.html" url for Swagger documentation or executing REST endpoints
 #### Use "http://localhost:8080/v2/api-docs" url for referring API docs.
 #### Run http://localhost:8080 to open the HAL Browser
-	*For GET requests, use the Explorer input field directly
-	*For POST requests, 
-		- Navigate to "Go to Entry Point" on top if not already on entry point
-		- Click the NON-GET button at the bottom
-		- Use the dialogue box to create the request
+	* For GET requests, use the Explorer input field directly
+	* For POST requests, 
+		* - Navigate to "Go to Entry Point" on top if not already on entry point
+		* - Click the NON-GET button at the bottom
+		* - Use the dialogue box to create the request
 		
 ### Use the Postman client or Swagger UI or HAL Browser to execute the available REST endpoints
 
@@ -43,8 +44,10 @@ There are three endpoints in the application-
 # Start monitoring a service
 
 To start monitoring a service, the server requires being provided with all the properties that are required to start monitoring
+
 	1. url - service url to be monitored
 	2. interval - monitoring interval for the service
+	
 server returns the HTTP 200 Ok status code
 server returns an updated entity in the established version
 
@@ -85,7 +88,9 @@ Request Headers - "Content-Type: application/json"
 # Stop monitoring a service
 
 To stop monitoring a service, the server requires being provided with all the properties that are required to stop monitoring
+
 	1. url - service url to be monitored
+	
 server returns the HTTP 200 Ok status code
 server returns an updated entity in the established version
 
