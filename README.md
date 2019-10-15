@@ -33,9 +33,9 @@ Refer resources/application.properties for application-wide properties
 #### Run http://localhost:8080 to open the HAL Browser
 	* For GET requests, use the Explorer input field directly
 	* For POST requests, 
-		* - Navigate to "Go to Entry Point" on top if not already on entry point
-		* - Click the NON-GET button at the bottom
-		* - Use the dialogue box to create the request
+		*  Navigate to "Go to Entry Point" on top if not already on entry point
+		*  Click the NON-GET button at the bottom
+		*  Use the dialogue box to create the request
 		
 ### Use the Postman client or Swagger UI or HAL Browser to execute the available REST endpoints
 
